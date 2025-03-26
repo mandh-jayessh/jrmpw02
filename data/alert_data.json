@@ -1,0 +1,9 @@
+{
+    "alert_box_text": "I am a JS Alert",
+    "alert_success_message": "You successfully clicked an alert",
+    "confirm_box_text": "I am a JS Confirm",
+    "confirm_ok_message": "You clicked: Ok",
+    "confirm_cancel_message": "You clicked: Cancel",
+    "prompt_box_text": "I am a JS prompt",
+    "prompt_input_text": "Indore"
+}
