@@ -18,7 +18,7 @@ test.describe("Rediff Tests", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test.only("Rediff SignUp Fill up details", async ({ page }) => {
+  test("Rediff SignUp Fill up details", async ({ page }) => {
     await page.locator("[name^='name']").fill("Joe");
     await page.locator("[name*='login']").fill("J");
     await page.locator("//input[@class='btn_checkavail']").click();
@@ -58,7 +58,7 @@ test.describe("Rediff Tests", () => {
       .selectOption("Bhopal");
   });
 
-  test.only("Rediff SignUp Fill up details using POM", async ({ page }) => {
+  test("Rediff SignUp Fill up details using POM", async ({ page }) => {
     await page.screenshot({
       path: "./screenshots/rediff_details_empty.png",
       fullPage: true,
