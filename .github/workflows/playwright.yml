@@ -12,8 +12,12 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
-    - name: Print Job Run Date.
-      run: echo "The job running at $(date)"
+    - name: Print Job Run Date and Time.
+      run: | 
+        echo "The job is running at:"
+        echo "Coordinated Universal Time (CUT): $(date)"
+        echo "Eastern Time (ET): $(TZ='America/New_York' date)"
+        echo "Indian Standard Time (IST): $(TZ='Asia/Kolkata' date)"
     - name: Install dependencies
       run: npm install
     - name: Install Playwright Browsers
