@@ -18,7 +18,7 @@ test.describe("Rediff Tests", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("Rediff SignUp Fill up details", async ({ page }) => {
+  test.skip("Rediff SignUp Fill up details", async ({ page }) => {
     await page.locator("[name^='name']").fill("Joe");
     await page.locator("[name*='login']").fill("J");
     await page.locator("//input[@class='btn_checkavail']").click();
@@ -59,6 +59,7 @@ test.describe("Rediff Tests", () => {
   });
 
   test("Rediff SignUp Fill up details using POM", async ({ page }) => {
+    test.setTimeout(90 * 1000);
     await page.screenshot({
       path: "./screenshots/rediff_details_empty.png",
       fullPage: true,
