@@ -13,7 +13,7 @@ jobs:
       with:
         node-version: lts/*
     - name: Print Job Run Date and Time.
-      run: echo "The job is running at:$(date) $(TZ='America/New_York' date) $(TZ='Asia/Kolkata' date)"
+      run: echo "The job is running at:$(date), $(TZ='Asia/Kolkata' date)"
     - name: Install dependencies
       run: npm install
     - name: Install Playwright Browsers
