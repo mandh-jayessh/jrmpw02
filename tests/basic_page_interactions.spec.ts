@@ -10,7 +10,7 @@ test.describe("Rediff Tests", () => {
   test.beforeEach("Launch WebPage", async ({ page }) => {
     redifflogIn = new RediffLogin(page);
     rediffSignUp = new RediffSignUp(page);
-
+    test.slow()
     await redifflogIn.gotoRediffLoginPage();
     await redifflogIn.click_new_id_link();
     await expect(page).toHaveTitle("Rediffmail Free Unlimited Storage");

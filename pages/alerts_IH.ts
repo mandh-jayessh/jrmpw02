@@ -21,6 +21,7 @@ export class JavascriptAlertsPage {
     await this.page.goto(
       "https://the-internet.herokuapp.com/javascript_alerts"
     );
+    await expect(this.page).toHaveURL(/javascript_alerts/)
     await expect(this.main_content).toBeVisible();
   }
 
