@@ -29,7 +29,7 @@ credentials.forEach((data) => {
     await page.locator("[name='password']").fill(data.password);
     await page.locator("[name='submit']").click();
     await expect(page.locator("h3")).toHaveText("Login Successfully");
-    await page.waitForTimeout(3000);
+    await page.getByRole("link", { name: "SIGN-OFF" }).click();
     await page.close();
   });
 });
