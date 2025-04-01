@@ -3,6 +3,37 @@ import { RediffLogin } from "../pages/rediff_login";
 import { RediffSignUp } from "../pages/rediff_signup";
 import signupData from "../data/rediff_signup_data.json";
 
+test("Simple Login Test", async ({ page }) => {
+  await page.goto("https://demo.guru99.com/test/newtours/");
+  await page.locator("[name='userName']").fill("test");
+  await page.locator("[name='password']").fill("test");
+  await page.locator("[name='submit']").click();
+  await page.close();
+});
+
+const credentials = [
+  {
+    user: "test",
+    password: "test",
+  },
+  {
+    user: "selenium",
+    password: "selenium",
+  },
+];
+
+credentials.forEach((data) => {
+  test(`Simple Login Test with use: ${data.user}`, async ({ page }) => {
+    await page.goto("https://demo.guru99.com/test/newtours/");
+    await page.locator("[name='userName']").fill(data.user);
+    await page.locator("[name='password']").fill(data.password);
+    await page.locator("[name='submit']").click();
+    await expect(page.locator("h3")).toHaveText("Login Successfully");
+    await page.waitForTimeout(3000);
+    await page.close();
+  });
+});
+
 test.describe("Rediff Tests", () => {
   let redifflogIn: RediffLogin;
   let rediffSignUp: RediffSignUp;
@@ -10,7 +41,7 @@ test.describe("Rediff Tests", () => {
   test.beforeEach("Launch WebPage", async ({ page }) => {
     redifflogIn = new RediffLogin(page);
     rediffSignUp = new RediffSignUp(page);
-    test.slow()
+    test.slow();
     await redifflogIn.gotoRediffLoginPage();
     await redifflogIn.click_new_id_link();
     await expect(page).toHaveTitle("Rediffmail Free Unlimited Storage");

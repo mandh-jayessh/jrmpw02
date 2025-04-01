@@ -1,7 +1,7 @@
 name: Scheduled Run
 on:
   schedule:
-    - cron: '0 0 * * 1,4'
+    - cron: '0 0 * * 1,3,5'
   workflow_dispatch:
 jobs:
   test:
