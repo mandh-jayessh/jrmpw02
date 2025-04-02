@@ -53,8 +53,13 @@ test.describe("Handling Alerts and Dialogs", () => {
     );
   });
 
-  test.afterEach("Close everything", async ({ page }) => {
+  test.afterEach("Close everything", async ({ page }, testInfo) => {
     await page.goBack();
     await page.close();
+    if (testInfo.status === "passed") {
+      console.log(`Test Passed: ${testInfo.title}`);
+    } else if (testInfo.status === "failed") {
+      console.log(`Test Failed: ${testInfo.title}`);
+    }
   });
 });
