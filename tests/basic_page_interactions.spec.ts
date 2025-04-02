@@ -52,7 +52,7 @@ test.describe("Rediff Tests", () => {
   test.skip("Rediff SignUp Fill up details", async ({ page }) => {
     await page.locator("[name^='name']").fill("Joe");
     await page.locator("[name*='login']").fill("J");
-    await page.locator("//input[@class='btn_checkavail']").click();
+    await page.locator("//input[@value='Check availability']").click();
     await page
       .getByText("Sorry, the ID that you are looking for is taken.")
       .or(page.getByText("Yippie! The ID you've chosen is available."))
@@ -90,11 +90,12 @@ test.describe("Rediff Tests", () => {
   });
 
   test("Rediff SignUp Fill up details using POM", async ({ page }) => {
-    test.setTimeout(90 * 1000);
+    test.setTimeout(45 * 1000);
     await page.screenshot({
       path: "./screenshots/rediff_details_empty.png",
       fullPage: true,
     });
+    await page.pause();
     await rediffSignUp.enter_name(signupData.name);
     await rediffSignUp.enter_id(signupData.id);
     await rediffSignUp.enter_password(signupData.password);
@@ -115,7 +116,12 @@ test.describe("Rediff Tests", () => {
     });
   });
 
-  test.afterEach("Close", async ({ page }) => {
+  test.afterEach("Close", async ({ page }, testInfo) => {
     await page.close();
+    if (testInfo.status === "passed") {
+      console.log(`Test Passed: ${testInfo.title}`);
+    } else if (testInfo.status === "failed") {
+      console.log(`Test Failed: ${testInfo.title}`);
+    }
   });
 });

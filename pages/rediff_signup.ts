@@ -23,7 +23,9 @@ export class RediffSignUp {
     this.page = page;
     this.full_name = page.locator("[name^='name']");
     this.rediffmal_id = page.locator("[name*='login']");
-    this.check_availibility = page.locator("//input[@class='btn_checkavail']");
+    this.check_availibility = page.locator(
+      "//input[@value='Check availability']"
+    );
     this.id_availibility_text = page
       .getByText("Sorry, the ID that you are looking for is taken.")
       .or(page.getByText("Yippie! The ID you've chosen is available."));
