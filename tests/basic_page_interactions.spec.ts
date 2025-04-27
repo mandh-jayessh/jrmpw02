@@ -3,14 +3,6 @@ import { RediffLogin } from "../pages/rediff_login";
 import { RediffSignUp } from "../pages/rediff_signup";
 import signupData from "../data/rediff_signup_data.json";
 
-test("Simple Login Test", async ({ page }) => {
-  await page.goto("https://demo.guru99.com/test/newtours/");
-  await page.locator("[name='userName']").fill("test");
-  await page.locator("[name='password']").fill("test");
-  await page.locator("[name='submit']").click();
-  await page.close();
-});
-
 const credentials = [
   {
     user: "test",
@@ -23,30 +15,42 @@ const credentials = [
 ];
 
 credentials.forEach((data) => {
-  test(`Simple Login Test with use: ${data.user}`, async ({ page }) => {
-    await page.goto("https://demo.guru99.com/test/newtours/");
-    await page.locator("[name='userName']").fill(data.user);
-    await page.locator("[name='password']").fill(data.password);
-    await page.locator("[name='submit']").click();
-    await expect(page.locator("h3")).toHaveText("Login Successfully");
-    await page.getByRole("link", { name: "SIGN-OFF" }).click();
-    await page.close();
+  test(`Simple Login Test with user: ${data.user}`, async ({ page }) => {
+    await test.step("Launch demo guru new tours Login Page", async () => {
+      await page.goto("https://demo.guru99.com/test/newtours/");
+    });
+    await test.step("Provide Credentials and Sign in", async () => {
+      await page.locator("[name='userName']").fill(data.user);
+      await page.locator("[name='password']").fill(data.password);
+      await page.locator("[name='submit']").click();
+    });
+    await test.step(`Verify Login is Successfull for user: ${data.user}`, async () => {
+      await expect(page.locator("h3")).toHaveText("Login Successfully");
+    });
+    await test.step("Sign Off", async () => {
+      await page.getByRole("link", { name: "SIGN-OFF" }).click();
+      await page.close();
+    });
   });
 });
 
 test.describe("Rediff Tests", () => {
-  let redifflogIn: RediffLogin;
+  let rediffLogIn: RediffLogin;
   let rediffSignUp: RediffSignUp;
 
-  test.beforeEach("Launch WebPage", async ({ page }) => {
-    redifflogIn = new RediffLogin(page);
+  test.beforeEach("Navigate to Rediff Site", async ({ page }) => {
+    rediffLogIn = new RediffLogin(page);
     rediffSignUp = new RediffSignUp(page);
     test.slow();
-    await redifflogIn.gotoRediffLoginPage();
-    await redifflogIn.click_new_id_link();
-    await expect(page).toHaveTitle("Rediffmail Free Unlimited Storage");
-    await expect(page).toHaveTitle(/Rediffmail Free/);
-    await page.waitForLoadState("networkidle");
+    await test.step("Navigate To Rediff Sign Up Page", async () => {
+      await rediffLogIn.gotoRediffLoginPage();
+      await rediffLogIn.click_new_id_link();
+      await page.waitForLoadState("load");
+    });
+    await test.step("Verify Sign Up Page Title", async () => {
+      await expect(page).toHaveTitle("Rediffmail Free Unlimited Storage");
+      await expect(page).toHaveTitle(/Rediffmail Free/);
+    });
   });
 
   test.skip("Rediff SignUp Fill up details", async ({ page }) => {
@@ -91,37 +95,47 @@ test.describe("Rediff Tests", () => {
 
   test("Rediff SignUp Fill up details using POM", async ({ page }) => {
     test.setTimeout(45 * 1000);
-    await page.screenshot({
-      path: "./screenshots/rediff_details_empty.png",
-      fullPage: true,
+    await test.step("Capture Screenshot on SignUp Page Launch", async () => {
+      await page.screenshot({
+        path: "./screenshots/rediff_details_empty.png",
+        fullPage: true,
+      });
     });
-    await page.pause();
-    await rediffSignUp.enter_name(signupData.name);
-    await rediffSignUp.enter_id(signupData.id);
-    await rediffSignUp.enter_password(signupData.password);
-    await rediffSignUp.checkbox_true();
-    await rediffSignUp.select_question(signupData.question);
-    await rediffSignUp.enter_security_answer(signupData.answer);
-    await rediffSignUp.enter_maiden_name(signupData.maidenName);
-    await rediffSignUp.enter_mobile(signupData.mobile_no);
-    await rediffSignUp.select_birth_date(
-      signupData.date,
-      signupData.month,
-      signupData.year
-    );
-    await rediffSignUp.select_city(signupData.city);
-    await page.screenshot({
-      path: `./screenshots/rediff_details_filledUp.png`,
-      fullPage: true,
+    await test.step("Fill Sign Up Details", async () => {
+      await rediffSignUp.enter_name(signupData.name);
+      await rediffSignUp.enter_id(signupData.id);
+      await rediffSignUp.enter_password(signupData.password);
+      await rediffSignUp.checkbox_true();
+      await rediffSignUp.select_question(signupData.question);
+      await rediffSignUp.enter_security_answer(signupData.answer);
+      await rediffSignUp.enter_maiden_name(signupData.maidenName);
+      await rediffSignUp.enter_mobile(signupData.mobile_no);
+      await rediffSignUp.select_birth_date(
+        signupData.date,
+        signupData.month,
+        signupData.year
+      );
+      await rediffSignUp.select_city(signupData.city);
+    });
+
+    await test.step("Capture Screenshot of Filled up Form", async () => {
+      await page.screenshot({
+        path: `./screenshots/rediff_details_filledUp.png`,
+        fullPage: true,
+      });
     });
   });
 
-  test.afterEach("Close", async ({ page }, testInfo) => {
-    await page.close();
-    if (testInfo.status === "passed") {
-      console.log(`Test Passed: ${testInfo.title}`);
-    } else if (testInfo.status === "failed") {
-      console.log(`Test Failed: ${testInfo.title}`);
-    }
+  test.afterEach("Tear Down", async ({ page }, testInfo) => {
+    await test.step("Close Page", async () => {
+      await page.close();
+    });
+    await test.step("Log Test Status", async () => {
+      if (testInfo.status === "passed") {
+        console.log(`Test Passed: ${testInfo.title}`);
+      } else if (testInfo.status === "failed") {
+        console.log(`Test Failed: ${testInfo.title}`);
+      }
+    });
   });
 });
