@@ -30,7 +30,7 @@ export class DemoAutomationTestingRegister {
     this.email = page.locator('input[type="email"]');
     this.phone = page.locator('input[type="tel"]');
     this.gender = page.getByRole("radio", { name: "Male", exact: true });
-    this.hobbies = page.locator('input[@type="checkbox"]');
+    this.hobbies = page.locator('//input[@type="checkbox"]');
     this.languages = page.locator("multi-select");
     this.skills = page.locator("#Skills");
     this.country = page.locator("#countries");
@@ -63,9 +63,16 @@ export class DemoAutomationTestingRegister {
     await this.phone.fill(phone.toString());
   }
 
-  async checkHobbies() {
-    await this.hobbies.nth(0).click();
-    await this.hobbies.nth(2).click();
+  async checkHobbies(hobbies: string[]) {
+    if (hobbies.includes("Cricket")) {
+      await this.hobbies.nth(0).click();
+    }
+    if (hobbies.includes("Movies")) {
+      await this.hobbies.nth(1).click();
+    }
+    if (hobbies.includes("Hockey")) {
+      await this.hobbies.nth(2).click();
+    }
   }
 
   async selectLanguages(languages: string[]) {
@@ -104,5 +111,9 @@ export class DemoAutomationTestingRegister {
     await this.browse_file_button.click();
     const fileChooser = await fileChooserPromise;
     await fileChooser.setFiles(filePath);
+  }
+
+  async refresh() {
+    await this.refresh_button.click();
   }
 }
