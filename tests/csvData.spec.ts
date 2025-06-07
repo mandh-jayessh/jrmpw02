@@ -21,7 +21,12 @@ test.describe("Fill Details Using CSV on demo automation testing register site",
 
   test.beforeEach(async ({ page }) => {
     register = new DemoAutomationTestingRegister(page);
-    await register.goTo();
+    await test.step("Navigate to Register Page", async () => {
+      await register.goTo();
+    });
+    await test.step("Verify Page Title", async () => {
+      await expect(page).toHaveTitle("Register");
+    });
   });
 
   test("Fill Details CSV", async ({ page }) => {
@@ -57,21 +62,27 @@ test.describe("Fill Details Using CSV on demo automation testing register site",
       : [];
 
     test(`Fill Details for ${user.fname} ${user.lname}`, async ({ page }) => {
-      await register.fillName(user.fname, user.lname);
-      await register.fillAddress(user.address);
-      await register.fillContact(user.email, user.phone);
-      await register.checkHobbies(hobbies);
-      await register.selectLanguages(languages);
-      await register.selectSkill(user.skill);
-      await register.selectCountry(user.country);
-      await register.uploadFile(user.filePath)
-      await register.dateOfBirth(
-        Number(user.day),
-        user.month,
-        Number(user.year)
-      );
-      await register.fillPassword(user.password);
-      await register.refresh();
+      await test.step("Fill Details", async () => {
+        await register.fillName(user.fname, user.lname);
+        await register.fillAddress(user.address);
+        await register.fillContact(user.email, user.phone);
+        await register.checkHobbies(hobbies);
+        await register.selectLanguages(languages);
+        await register.selectSkill(user.skill);
+        await register.selectCountry(user.country);
+        await register.dateOfBirth(
+          Number(user.day),
+          user.month,
+          Number(user.year)
+        );
+        await register.fillPassword(user.password);
+      });
+      await test.step("Browse File and Upload", async () => {
+        await register.uploadFile(user.filePath);
+      });
+      await test.step("Clear the Provided Details", async () => {
+        await register.refresh();
+      });
     });
   }
 });
