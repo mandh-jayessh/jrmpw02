@@ -92,6 +92,7 @@ export class DemoAutomationTestingRegister {
 
   async selectCountry(country: string) {
     await this.select_country.click();
+    await this.page.getByRole("treeitem", { name: country }).waitFor();
     await this.page.getByRole("treeitem", { name: country }).click();
   }
 
