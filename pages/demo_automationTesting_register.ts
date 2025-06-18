@@ -34,7 +34,7 @@ export class DemoAutomationTestingRegister {
     this.languages = page.locator("multi-select");
     this.skills = page.locator("#Skills");
     this.country = page.locator("#countries");
-    this.select_country = page.locator("span").getByRole("combobox");
+    this.select_country = page.getByLabel('', { exact: true });
     this.dob_year = page.getByPlaceholder("Year");
     this.dob_month = page.getByPlaceholder("Month");
     this.dob_day = page.getByPlaceholder("Day");
